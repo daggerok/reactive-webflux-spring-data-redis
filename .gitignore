@@ -15,11 +15,10 @@ nbdist/
 .nb-gradle/
 
 ### IntelliJ IDEA ###
+.gradle/
+gradle*
 *.iws
 *.iml
 *.ipr
-.gradle/
-gradel/
-gradlew*
 .idea/
 !.idea/runConfigurations/*
