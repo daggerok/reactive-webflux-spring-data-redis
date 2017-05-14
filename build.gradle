@@ -27,7 +27,7 @@ bootJar {
         included = true
     }
 }
- */
+*/
 plugins {
     id "java"
     id "idea"
@@ -91,6 +91,8 @@ task composeDown(type: Exec) {
     args "-c", "$dockerCompose down -v"
 }
 
+/*
 test.dependsOn composeUp
 test.finalizedBy composeDown
 test.shouldRunAfter composeUp
+*/
