@@ -1,0 +1,9 @@
+= reactive-webflux-spring-data-redis image:https://travis-ci.org/daggerok/reactive-webflux-spring-data-redis.svg?branch=master["Build Status", link="https://travis-ci.org/daggerok/reactive-webflux-spring-data-redis"]
+
+[source,bash]
+----
+gradle composeUp
+gradle bootRun
+gradle composeDown
+gradle --stop
+----

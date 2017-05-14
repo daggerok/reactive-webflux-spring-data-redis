@@ -1,0 +1,15 @@
+version: '2.1'
+services:
+  redis:
+    image: healthcheck/redis:alpine
+    ports:
+      - 6379:6379
+    volumes:
+      - redis-data:/data
+    networks:
+      - backoffice
+volumes:
+  redis-data: {}
+networks:
+  backoffice:
+    driver: bridge
