@@ -1,12 +1,15 @@
 package daggerok;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import daggerok.data.Activity;
 import daggerok.data.ActivityRepository;
 import daggerok.data.Task;
 import daggerok.data.TaskRepository;
+import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,10 +23,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.stream.StreamSupport;
-
 import static java.lang.String.format;
-import static java.util.Collections.frequency;
 import static java.util.Collections.singletonList;
 import static org.springframework.web.reactive.function.server.RequestPredicates.DELETE;
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
@@ -35,6 +35,8 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 @RequiredArgsConstructor
 @EnableRedisRepositories(basePackageClasses = ActivityRepository.class)
 public class ReactiveWebfluxSpringDataRedisApplication {
+
+  @Autowired ObjectMapper objectMapper;
 
   @Bean
   public RedisConnection connection1(final RedisConnectionFactory redisConnectionFactory) {
@@ -56,6 +58,13 @@ public class ReactiveWebfluxSpringDataRedisApplication {
     return new LettuceConnectionFactory();
   }
 
+  private String json(Object o) {
+
+    return Try.of(() -> objectMapper.writerWithDefaultPrettyPrinter()
+                                    .writeValueAsString(o))
+              .get();
+  }
+
   @Bean
   @Transactional
   public CommandLineRunner testData(final TaskRepository taskRepository,
@@ -63,8 +72,8 @@ public class ReactiveWebfluxSpringDataRedisApplication {
 
     if (taskRepository.count() > 0 || activityRepository.count() > 0)
       return args -> log.info("test-data already exists...\n{}\n{}",
-                              taskRepository.findAll(),
-                              activityRepository.findAll());
+                              json(taskRepository.findAll()),
+                              json(activityRepository.findAll()));
 
     return args -> Flux.merge(Mono.just(taskRepository.count()),
                               Mono.just(activityRepository.count()))

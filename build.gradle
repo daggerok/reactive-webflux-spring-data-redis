@@ -121,7 +121,6 @@ repositories {
     maven { url "https://repo.spring.io/milestone" }
 }
 
-
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-data-redis-reactive",
             "org.springframework.boot:spring-boot-starter-webflux",
