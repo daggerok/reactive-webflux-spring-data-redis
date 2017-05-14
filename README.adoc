@@ -2,8 +2,7 @@
 
 [source,bash]
 ----
-gradle composeUp
-gradle bootRun
+gradle composeUp bootRun
 
 http :8080/tasks
 http :8080/activities
