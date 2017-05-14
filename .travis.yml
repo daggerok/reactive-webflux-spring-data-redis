@@ -1,5 +1,7 @@
 group: edge
 dist: trusty
+#services:
+#  - redis
 install: true
 language: java
 jdk: oraclejdk8

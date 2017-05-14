@@ -37,14 +37,14 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 public class ReactiveWebfluxSpringDataRedisApplication {
 
   @Autowired ObjectMapper objectMapper;
-
+/*
   @Bean
-  public RedisConnection connection1(final RedisConnectionFactory redisConnectionFactory) {
+  public RedisConnection redisConnection(final RedisConnectionFactory redisConnectionFactory) {
     return redisConnectionFactory.getConnection();
   }
-
+*/
   @Bean
-  public ReactiveRedisConnection connection2(final ReactiveRedisConnectionFactory redisConnectionFactory) {
+  public ReactiveRedisConnection reactiveRedisConnection(final ReactiveRedisConnectionFactory redisConnectionFactory) {
     return redisConnectionFactory.getReactiveConnection();
   }
 
