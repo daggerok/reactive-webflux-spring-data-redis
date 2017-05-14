@@ -7,12 +7,16 @@ import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
+import java.io.Serializable;
+
 @Data
 @RedisHash
 @NoArgsConstructor
 @Accessors(chain = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Task {
+public class Task implements Serializable {
+
+  private static final long serialVersionUID = 9199848247320081613L;
 
   @Id
   String id;

@@ -17,6 +17,8 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Activity implements Serializable {
 
+  private static final long serialVersionUID = -8874175142990046027L;
+
   @Id
   String id;
   List<Task> tasks;
