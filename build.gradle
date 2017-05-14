@@ -124,7 +124,8 @@ repositories {
 
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-data-redis-reactive",
-            "org.springframework.boot:spring-boot-starter-webflux"
+            "org.springframework.boot:spring-boot-starter-webflux",
+            "io.vavr:vavr:0.9.0"
     runtime "org.springframework.boot:spring-boot-devtools"
     compileOnly "org.projectlombok:lombok"
     testCompile "org.springframework.boot:spring-boot-starter-test"
@@ -136,11 +137,13 @@ dependencyManagement {
     }
 }
 
+def dockerCompose = "docker-compose --project-name=reactive"
+
 task composeUp(type: Exec) {
     executable "bash"
     args "-c", """
-                    docker-compose down -v \
-                    && docker-compose up -d --build \
+                    $dockerCompose down -v \
+                    && $dockerCompose up -d --build \
                     && echo "waiting for redis bootstrap..." \
                     && sleep 5
                """
@@ -148,7 +151,7 @@ task composeUp(type: Exec) {
 
 task composeDown(type: Exec) {
     executable "bash"
-    args "-c", "docker-compose down -v"
+    args "-c", "$dockerCompose down -v"
 }
 
 test.dependsOn composeUp

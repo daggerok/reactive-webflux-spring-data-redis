@@ -4,6 +4,15 @@
 ----
 gradle composeUp
 gradle bootRun
+
+http :8080/tasks
+http :8080/activities
+
+http delete :8080
+
+http :8080/tasks
+http :8080/activities
+
 gradle composeDown
 gradle --stop
 ----
