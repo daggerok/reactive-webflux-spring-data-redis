@@ -74,24 +74,15 @@ dependencies {
     testCompile "org.springframework.boot:spring-boot-starter-test"
 }
 
-def dockerCompose = "docker-compose --project-name=reactive"
-
-task composeUp(type: Exec) {
-    executable "bash"
-    args "-c", """
-                    $dockerCompose down -v \
-                    && $dockerCompose up -d --build \
-                    && echo "waiting for redis bootstrap..." \
-                    && sleep 15
-               """
-}
-
-task composeDown(type: Exec) {
-    executable "bash"
-    args "-c", "$dockerCompose down -v"
-}
-
 task ci {
-    dependsOn composeUp, test
-    finalizedBy composeDown
+    shouldRunAfter clean, assemble, ":docker:composeDown"
+    dependsOn ":docker:composeUp", test
+    finalizedBy ":docker:composeDown"
 }
+
+[test, build, bootRun].each { Task t ->
+    t.shouldRunAfter clean, assemble, ":docker:composeUp"
+    t.dependsOn ":docker:composeUp"
+    t.finalizedBy ":docker:composeDown"
+}
+

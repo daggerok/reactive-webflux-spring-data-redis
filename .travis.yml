@@ -1,10 +1,22 @@
 group: edge
-services:
-  - redis
-install: true
+dist: trusty
+
 language: java
 jdk: oraclejdk8
+
+install: true
 before_install:
+
+  # install docker-compose
+  - sudo apt update
+  - sudo apt install -y python-pip curl jq libxml2-utils
+  - sudo pip install docker-compose
+  - sudo usermod -aG docker $(whoami)
+
+  # kill whatever punning on postgres / rabbitmq port
+  - sudo kill $(sudo lsof -t -i:5432) | true
+  - sudo kill $(sudo lsof -t -i:5672) | true
+
   # gradle
   - curl -s "https://get.sdkman.io" | bash
   - source "$HOME/.sdkman/bin/sdkman-init.sh"
@@ -16,10 +28,10 @@ before_install:
   - mkdir -p "$HOME/.sdkman/etc"
   - sdk use gradle
   - source "$HOME/.sdkman/bin/sdkman-init.sh"
-script:
-  - gradle clean build
-after_script:
-  - gradle --stop
+
+script: gradle clean build
+after_script: gradle --stop
+
 cache:
   directories:
     - $HOME/.gradle/

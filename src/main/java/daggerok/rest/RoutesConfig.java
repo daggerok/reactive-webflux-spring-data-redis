@@ -40,7 +40,7 @@ public class RoutesConfig {
                   activityRepository.deleteAll();
                   taskRepository.deleteAll();
                   return "done.";
-                }).subscribe(), String.class))
+                }), String.class))
 
         .andRoute(
 

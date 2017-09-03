@@ -16,7 +16,6 @@ nbdist/
 
 ### IntelliJ IDEA ###
 .gradle/
-gradle*
 *.iws
 *.iml
 *.ipr

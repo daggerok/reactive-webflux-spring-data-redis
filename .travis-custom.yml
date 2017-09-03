@@ -1,32 +1,25 @@
 group: edge
 dist: trusty
-install: true
+
 language: java
 jdk: oraclejdk8
-env:
-  DOCKER_COMPOSE_VERSION: 1.12.0
+
+install: true
 before_install:
-  # gradle
-  - curl -s "https://get.sdkman.io" | bash
-  - source "$HOME/.sdkman/bin/sdkman-init.sh"
-  - sdk selfupdate
-  - touch "$HOME/.sdkman/etc/config"
-  - sed -i -e 's/^sdkman_auto_answer=false$/sdkman_auto_answer=true/g' "$HOME/.sdkman/etc/config"
-  - sdk use gradle
-  - sdk install gradle
-  - mkdir -p "$HOME/.sdkman/etc"
-  - sdk use gradle
-  - source "$HOME/.sdkman/bin/sdkman-init.sh"
-  # docker-compose
-  - sudo rm -rf /usr/local/bin/docker-compose
-  - export DOCKER_COPOSE_URL=https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)
-  - curl -L $DOCKER_COPOSE_URL > docker-compose
-  - chmod +x docker-compose
-  - sudo mv -f docker-compose /usr/local/bin
-script:
-  - gradle clean ci
-after_script:
-  - gradle --stop
+
+  # install docker-compose
+  - sudo apt update
+  - sudo apt install -y python-pip curl jq libxml2-utils
+  - sudo pip install docker-compose
+  - sudo usermod -aG docker $(whoami)
+
+  # kill whatever punning on postgres / rabbitmq port
+  - sudo kill $(sudo lsof -t -i:5432) | true
+  - sudo kill $(sudo lsof -t -i:5672) | true
+
+script: bash gradlew clean ci
+after_script: bash gradlew --stop
+
 cache:
   directories:
     - $HOME/.gradle/

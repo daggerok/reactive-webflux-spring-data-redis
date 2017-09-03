@@ -1,4 +1,4 @@
-version: '2.1'
+version: "2.1"
 services:
   redis:
     image: healthcheck/redis:alpine
@@ -6,10 +6,9 @@ services:
       - 6379:6379
     volumes:
       - redis-data:/data
-    networks:
-      - backoffice
+    networks: [backing-services]
 volumes:
   redis-data: {}
 networks:
-  backoffice:
+  backing-services:
     driver: bridge
